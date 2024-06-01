@@ -1,40 +1,74 @@
-import altair as alt
-import numpy as np
-import pandas as pd
 import streamlit as st
 
-"""
-# Welcome to Streamlit!
+# Función para verificar las reglas de diagnóstico
+def diagnosticar_diabetes(datos):
+    resultado = 0
+    if datos['edad'] >= 20 and datos['edad'] <= 79 and datos['poliuria'] == 1 and datos['polidipsia'] == 1 and datos['perdida_peso'] == 1:
+        resultado = 1
+    elif datos['edad'] >= 20 and datos['edad'] <= 79 and datos['poliuria'] == 1 and datos['polidipsia'] == 1 and datos['obesidad'] == 1 and datos['paresia_parcial'] == 0 and datos['polifagia'] == 0:
+        resultado = 1
+    elif datos['edad'] >= 20 and datos['edad'] <= 79 and datos['poliuria'] == 1 and datos['polidipsia'] == 1 and datos['paresia_parcial'] == 1 and datos['obesidad'] == 0 and datos['polifagia'] == 0:
+        resultado = 1
+    elif datos['edad'] >= 20 and datos['edad'] <= 79 and datos['poliuria'] == 1 and datos['polidipsia'] == 1 and datos['polifagia'] == 1 and datos['obesidad'] == 0 and datos['paresia_parcial'] == 0:
+        resultado = 1
+    elif datos['poliuria'] == 0 and datos['polidipsia'] == 0 and datos['obesidad'] == 0 and datos['alopecia'] == 1 and datos['picazon'] == 1:
+        resultado = 0
+    elif datos['rigidez_muscular'] == 0 or datos['perdida_peso'] == 0:
+        resultado = 0
+    return resultado
 
-Edit `/streamlit_app.py` to customize this app to your heart's desire :heart:.
-If you have any questions, checkout our [documentation](https://docs.streamlit.io) and [community
-forums](https://discuss.streamlit.io).
+# Interfaz de usuario con Streamlit
+st.title("Diagnóstico de Diabetes Asistido")
 
-In the meantime, below is an example of what you can do with just a few lines of code:
-"""
+# Entrada de datos
+col1, col2, col3 = st.columns(3)
 
-num_points = st.slider("Number of points in spiral", 1, 10000, 1100)
-num_turns = st.slider("Number of turns in spiral", 1, 300, 31)
+with col1:
+    edad = st.number_input("Edad", min_value=0, max_value=120, step=1)
+    genero = st.selectbox("Género", ["Masculino", "Femenino"], index=0)
+    poliuria = st.selectbox("Poliuria (orinar en exceso)", [0, 1])
+    obesidad = st.selectbox("Obesidad", [0, 1])
+    debilidad = st.selectbox("Debilidad", [0, 1])
+    picazon = st.selectbox("Picazón", [0, 1])
 
-indices = np.linspace(0, 1, num_points)
-theta = 2 * np.pi * num_turns * indices
-radius = indices
+with col2:
+    vision_borrosa = st.selectbox("Visión borrosa", [0, 1])
+    irritabilidad = st.selectbox("Irritabilidad", [0, 1])
+    polidipsia = st.selectbox("Polidipsia (sed excesiva)", [0, 1])
+    perdida_peso = st.selectbox("Pérdida súbita de peso", [0, 1])
+    polifagia = st.selectbox("Polifagia (hambre excesiva)", [0, 1])
 
-x = radius * np.cos(theta)
-y = radius * np.sin(theta)
+with col3:
+    candidiasis_genital = st.selectbox("Candidiasis genital", [0, 1])
+    cicatrizacion_tardia = st.selectbox("Cicatrización tardía", [0, 1])
+    paresia_parcial = st.selectbox("Paresia parcial", [0, 1])
+    rigidez_muscular = st.selectbox("Rigidez muscular", [0, 1])
+    alopecia = st.selectbox("Alopecia (pérdida de cabello)", [0, 1])
+  
 
-df = pd.DataFrame({
-    "x": x,
-    "y": y,
-    "idx": indices,
-    "rand": np.random.randn(num_points),
-})
+# Botón para diagnóstico
+if st.button("Diagnosticar"):
+    datos = {
+        "edad": edad,
+        "genero": genero,
+        "poliuria": poliuria,
+        "polidipsia": polidipsia,
+        "perdida_peso": perdida_peso,
+        "debilidad": debilidad,
+        "polifagia": polifagia,
+        "candidiasis_genital": candidiasis_genital,
+        "vision_borrosa": vision_borrosa,
+        "picazon": picazon,
+        "irritabilidad": irritabilidad,
+        "cicatrizacion_tardia": cicatrizacion_tardia,
+        "paresia_parcial": paresia_parcial,
+        "rigidez_muscular": rigidez_muscular,
+        "alopecia": alopecia,
+        "obesidad": obesidad
+    }
 
-st.altair_chart(alt.Chart(df, height=700, width=700)
-    .mark_point(filled=True)
-    .encode(
-        x=alt.X("x", axis=None),
-        y=alt.Y("y", axis=None),
-        color=alt.Color("idx", legend=None, scale=alt.Scale()),
-        size=alt.Size("rand", legend=None, scale=alt.Scale(range=[1, 150])),
-    ))
+    resultado = diagnosticar_diabetes(datos)
+    if resultado == 1:
+        st.write("El resultado del diagnóstico es: *Positivo para Diabetes*.")
+    else:
+        st.write("El resultado del diagnóstico es: *Negativo para Diabetes*.")
