@@ -41,7 +41,7 @@ with col2:
 with col3:
     candidiasis_genital = st.selectbox("Candidiasis genital", [0, 1])
     cicatrizacion_tardia = st.selectbox("Cicatrización tardía", [0, 1])
-    paresia_parcial = st.selectbox("Paresia parcial", [0, 1])
+    paresia_parcial = st.selectbox("Parálisis parcial", [0, 1])
     rigidez_muscular = st.selectbox("Rigidez muscular", [0, 1])
     alopecia = st.selectbox("Alopecia (pérdida de cabello)", [0, 1])
   
