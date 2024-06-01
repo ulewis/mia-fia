@@ -35,7 +35,7 @@ with col2:
     vision_borrosa = st.selectbox("Visión borrosa", [0, 1])
     irritabilidad = st.selectbox("Irritabilidad", [0, 1])
     polidipsia = st.selectbox("Polidipsia (sed excesiva)", [0, 1])
-    perdida_peso = st.selectbox("Pérdida súbita de peso", [0, 1])
+    perdida_peso = st.selectbox("Pérdida de peso repentina", [0, 1])
     polifagia = st.selectbox("Polifagia (hambre excesiva)", [0, 1])
 
 with col3:
